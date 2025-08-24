@@ -324,6 +324,8 @@ jump_fx = pygame.mixer.Sound('jump.wav')
 jump_fx.set_volume(0.5)
 game_over_fx = pygame.mixer.Sound('game_over.wav')
 game_over_fx.set_volume(0.75)
+game_over2_fx = pygame.mixer.Sound('game_over2.wav')
+game_over2_fx.set_volume(0.75)
 win1_fx = pygame.mixer.Sound('win1.wav')
 win1_fx.set_volume(0.75)
 win2_fx = pygame.mixer.Sound('win2.wav')
@@ -358,7 +360,7 @@ def reset_level(level):
     coin_group.add(score_coin)
     world_data = level_list[level-1]
     world = World(world_data)
-    lives = 3
+    
     return world
 
 class Button():
@@ -468,15 +470,23 @@ class Player():
 
             #check for collision with enemies
             if pygame.sprite.spritecollide(self, blob_group, False):
-                
+                rand_win = random.randint(0,10)
+                if rand_win % 2 == 0:
+                    game_over_fx.play()
+                else:
+                    game_over2_fx.play()
                 game_over = -1
-                game_over_fx.play()
+                
 
             #check for collision with lava
             if pygame.sprite.spritecollide(self, lava_group, False):
-                
+                rand_win = random.randint(0,10)
+                if rand_win % 2 == 0:
+                    game_over_fx.play()
+                else:
+                    game_over2_fx.play()
                 game_over = -1
-                game_over_fx.play()
+                
                 
             #check for collision with exit
                 
@@ -774,7 +784,7 @@ while running:
                     playing_music = 3
                     game_fx.play(-1)
         if game_over == -1:
-            #draw_text('x ', font_score, white, 440, 10)
+            
             screen.blit(dead_img, (460, 18))
             if restart_button.draw():
                 lives -= 1  
@@ -782,7 +792,7 @@ while running:
                 world = reset_level(level)
                 game_over = 0
                 score = 0
-            
+                
 
         #if player has completed the level
         if game_over == 1:
@@ -828,10 +838,7 @@ while running:
             if event.key == pygame.K_ESCAPE:
                 running = False
                 
-    
-        #draw_grid()
 
-                
     pygame.display.update()
         
 pygame.quit()
